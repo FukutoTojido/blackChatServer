@@ -1,8 +1,9 @@
 const express = require("express");
 const { MongoClient } = require("mongodb");
+const mongoUriJson = require("./mongoURI.json")
 
 const app = express();
-const mongoURI = process.env.MONGO_URI;
+const mongoURI = mongoUriJson.mongoUri;
 const client = new MongoClient(mongoURI);
 
 const saveMessage = async (mes, username) => {
