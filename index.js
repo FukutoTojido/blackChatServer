@@ -2,7 +2,7 @@ const express = require("express");
 const { MongoClient } = require("mongodb");
 
 const app = express();
-const mongoURI = "mongodb+srv://tryz:tryz1812@sldr.ors6dui.mongodb.net/?retryWrites=true&w=majority";
+const mongoURI = process.env.MONGO_URI;
 const client = new MongoClient(mongoURI);
 
 const saveMessage = async (mes, username) => {
