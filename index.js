@@ -54,8 +54,19 @@ const getUserAddress = async (name, username) => {
         .find({}, { projection: { _id: 0 } })
         .toArray();
 
-    const chatLog = allLog.filter((l) => l.receivers.includes(name) && l.receivers.includes(username))[0];
+    console.log(userAddress);
+    if (!userAddress) {
+        return { err: 0 };
+    }
 
+    if (allLog.filter((l) => l.receivers.includes(name) && l.receivers.includes(username)).length === 0) {
+        await db.collection("chatLog").insertOne({ receivers: [username, name], chatLog: [] });
+        await db.collection("friendsList").updateOne({ username: username }, { $push: { friendsList: name } });
+        await db.collection("friendsList").updateOne({ username: name }, { $push: { friendsList: username } });
+        return { ...userAddress, chatLog: [] };
+    }
+
+    const chatLog = allLog.filter((l) => l.receivers.includes(name) && l.receivers.includes(username))[0];
     return { ...userAddress, chatLog: chatLog.chatLog };
 };
 
